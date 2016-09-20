@@ -85,16 +85,19 @@ outputfile=$2
 
 # --- Body --------------------------------------------------------
 #  SCRIPT LOGIC GOES HERE
-echo $inputfile
-echo $outputfile
-tmpfile=$(mktemp /tmp/$SUBJECT.XXXXXX).png
-ffmpeg -y -i $inputfile -vf fps=4,scale=$yscale:-1:flags=lanczos,palettegen $tmpfile &&
-    ffmpeg -i $inputfile -i $tmpfile \
-      -filter_complex "fps=$framerate,scale=$yscale:-1:flags=lanczos[x];[x][1:v]paletteuse" \
-      $outputfile
+echo "input file: $inputfile"
+echo "output file: $outputfile"
+palettefile=$(mktemp /tmp/$SUBJECT.XXXXXX).png
+filters="fps=$framerate,scale=$yscale:-1:flags=lanczos"
+
+ffmpeg -v warning -i $1 -vf "$filters,palettegen" -y $palettefile &&
+    ffmpeg -v warning -i $inputfile -i $palettefile \
+      -lavfi "$filters [x]; [x][1:v] paletteuse" -y $outputfile
+
 if [ -f $outputfile ]; then
     outputsize=`du -h $outputfile | cut -f1`
     echo "$outputfile is $outputsize"
 fi
-rm "$tmpfile"
+
+rm "$palettefile"
 # -----------------------------------------------------------------
