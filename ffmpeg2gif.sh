@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-VERSION=0.1.0
+VERSION=0.2.0
 SUBJECT=ffmpeg2gif
 USAGE="Usage: ffmpeg2gif.sh -hv -f <framerate> -u <yscale> input.mov output.gif"
 
