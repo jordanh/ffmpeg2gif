@@ -22,7 +22,7 @@
 
 VERSION=0.2.0
 SUBJECT=ffmpeg2gif
-USAGE="Usage: ffmpeg2gif.sh -hv -f <framerate> -u <yscale> input.mov output.gif"
+USAGE="Usage: ffmpeg2gif.sh -hv -f <framerate> -y <yscale> input.mov output.gif"
 
 # --- Options processing -------------------------------------------
 if [ $# == 0 ] ; then
