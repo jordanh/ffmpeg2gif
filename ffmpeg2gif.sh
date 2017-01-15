@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-VERSION=0.3.0
+VERSION=0.3.1
 SUBJECT=ffmpeg2gif
 USAGE="Usage: ffmpeg2gif.sh [-hv -f <framerate> -y <yscale> -s <skip_sec> -t <duration_sec>] input.mov output.gif"
 
@@ -59,7 +59,7 @@ while getopts ":f:y:s:t:vh" optname
         fi
         ;;
       "s")
-        if [[ "$OPTARG" =~ ^[0-9]+$ ]] && [ "$OPTARG" -ge 1 ]; then
+        if [[ "$OPTARG" =~ ^[0-9:.]+$ ]]; then
             echo "skip_sec: $OPTARG"
             skip_sec=$OPTARG
         else
@@ -67,7 +67,7 @@ while getopts ":f:y:s:t:vh" optname
         fi
         ;;
       "t")
-        if [[ "$OPTARG" =~ ^[0-9]+$ ]] && [ "$OPTARG" -ge 1 ]; then
+        if [[ "$OPTARG" =~ ^[0-9:.]+$ ]]; then
             echo "duration_sec: $OPTARG"
             duration_sec=$OPTARG
         else
@@ -99,7 +99,7 @@ inputfile=$1
 outputfile=$2
 
 [[ -z "$inputfile" ]] && echo "no input file specified" && exit -1
-[[ -z "$outputfile" ]] && echo "no output file specified" && exit -1
+[[ -z "$outputfile" ]] && outputfile=$1.gif
 
 # --- Body --------------------------------------------------------
 #  SCRIPT LOGIC GOES HERE
@@ -109,10 +109,10 @@ palettefile=$(mktemp /tmp/$SUBJECT.XXXXXX).png
 filters="fps=$framerate,scale=$yscale:-1:flags=lanczos"
 
 optional_params=""
-if [ "$skip_sec" -ge 1 ]; then
+if [ "$skip_sec" != -1 ]; then
   optional_params="-ss $skip_sec"
 fi
-if [ "$duration_sec" -ge 1 ]; then
+if [ "$duration_sec" != -1 ]; then
   optional_params="$optional_params -t $duration_sec"
 fi
 
