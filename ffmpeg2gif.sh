@@ -106,7 +106,7 @@ outputfile=$2
 echo "input file: \"$inputfile\""
 echo "output file: \"$outputfile\""
 palettefile=$(mktemp /tmp/$SUBJECT.XXXXXX).png
-filters="fps=$framerate,scale=$yscale:-1:flags=lanczos"
+filters="fps=$framerate,scale=-1:$yscale:flags=lanczos"
 
 optional_params=""
 if [ "$skip_sec" != -1 ]; then
